@@ -43,16 +43,15 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public void startSession(StateSessionDto startSession) {
         UUID deviceId = startSession.getDeviceId();
-        UUID sessionId = sessionRepository.save(sessionRepository.save(Session.builder()
+        UUID routeId = routeClient.createRoute(RouteDto.builder().deviceId(deviceId).build());
+        sessionRepository.save(sessionRepository.save(Session.builder()
                 .profileId(startSession.getProfileId())
                 .deviceId(startSession.getDeviceId())
+                .routeId(routeId)
                 .start(startSession.getTime())
                 .startDevicePictureUrls(startSession.getDevicePictureUrls())
                 .isActive(true)
-                .build()))
-                .getId();
-
-        routeClient.createRoute(RouteDto.builder().deviceId(deviceId).sessionId(sessionId).build());
+                .build()));
     }
 
     @Override
@@ -69,9 +68,6 @@ public class SessionServiceImpl implements SessionService {
         session.setActive(false);
         //  todo: calculate cost, distance etc
         sessionRepository.save(session);
-
-        UUID routeId = session.getRouteId();
-        UUID sessionId = session.getId();
-        routeClient.update(RouteDto.builder().id(routeId).deviceId(deviceId).sessionId(sessionId).build());
+        routeClient.update(RouteDto.builder().id(session.getRouteId()).deviceId(deviceId).build());
     }
 }
