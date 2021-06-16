@@ -1,16 +1,14 @@
 package tech.itpark.deviceorchestrator.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,7 +21,7 @@ public class SessionDto {
     private Instant end;
     private long usageTimeInSeconds;
     private BigDecimal cost;
-    private boolean isActive;
+    private Boolean isActive;
     private List<String> startDevicePictureUrls;
     private List<String> endDevicePictureUrls;
 }

@@ -61,6 +61,7 @@ public class SessionServiceImpl implements SessionService {
 
         RouteDto route = RouteDto.builder()
                 .sessionId(sessionId)
+                .isActive(true)
                 .deviceId(deviceId)
                 .start(startSession.getTime())
                 .build();
@@ -79,12 +80,13 @@ public class SessionServiceImpl implements SessionService {
 
         session.setEndDevicePictureUrls(finishSession.getDevicePictureUrls());
         session.setEnd(finishSession.getTime());
-        session.setActive(false);
+        session.setIsActive(false);
         //  todo: calculate cost, distance etc
         routeClient.finishRoute(RouteDto.builder()
                 .sessionId(session.getId())
                 .start(session.getStart())
                 .end(finishSession.getTime())
+                .isActive(false)
                 .deviceId(deviceId)
                 .build());
 

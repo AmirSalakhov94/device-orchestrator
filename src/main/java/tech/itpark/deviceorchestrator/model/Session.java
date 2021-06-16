@@ -23,7 +23,7 @@ public class Session {
     private Instant end;
     private long usageTimeInSeconds;
     private BigDecimal cost;
-    private boolean isActive;
+    private Boolean isActive;
     private List<String> startDevicePictureUrls;
     private List<String> endDevicePictureUrls;
 }
