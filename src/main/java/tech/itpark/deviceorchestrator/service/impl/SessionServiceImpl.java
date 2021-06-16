@@ -26,6 +26,14 @@ public class SessionServiceImpl implements SessionService {
     private final RouteClient routeClient;
 
     @Override
+    public List<SessionDto> getActiveSession() {
+        return sessionRepository.findByActiveIsTrue()
+                .stream()
+                .map(sessionMapper::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<SessionDto> getSessionsByDeviceId(UUID deviceId) {
         return sessionRepository.findByDeviceId(deviceId)
                 .stream()
@@ -43,15 +51,21 @@ public class SessionServiceImpl implements SessionService {
     @Override
     public void startSession(StateSessionDto startSession) {
         UUID deviceId = startSession.getDeviceId();
-        UUID routeId = routeClient.createRoute(RouteDto.builder().deviceId(deviceId).build());
-        sessionRepository.save(sessionRepository.save(Session.builder()
+        UUID sessionId = sessionRepository.save(sessionRepository.save(Session.builder()
                 .profileId(startSession.getProfileId())
                 .deviceId(startSession.getDeviceId())
-                .routeId(routeId)
                 .start(startSession.getTime())
                 .startDevicePictureUrls(startSession.getDevicePictureUrls())
                 .isActive(true)
-                .build()));
+                .build())).getId();
+
+        RouteDto route = RouteDto.builder()
+                .sessionId(sessionId)
+                .deviceId(deviceId)
+                .start(startSession.getTime())
+                .build();
+
+        routeClient.startRoute(route);
     }
 
     @Override
@@ -67,7 +81,13 @@ public class SessionServiceImpl implements SessionService {
         session.setEnd(finishSession.getTime());
         session.setActive(false);
         //  todo: calculate cost, distance etc
+        routeClient.finishRoute(RouteDto.builder()
+                .sessionId(session.getId())
+                .start(session.getStart())
+                .end(finishSession.getTime())
+                .deviceId(deviceId)
+                .build());
+
         sessionRepository.save(session);
-        routeClient.update(RouteDto.builder().id(session.getRouteId()).deviceId(deviceId).build());
     }
 }

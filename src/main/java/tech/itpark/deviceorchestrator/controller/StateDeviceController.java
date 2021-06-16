@@ -11,18 +11,18 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("monitoring/device")
+@RequestMapping("/state/device")
 public class StateDeviceController {
 
     private final StateDeviceService stateDeviceService;
 
     @GetMapping("/all")
-    List<StateDeviceDto> getDevices() {
+    public List<StateDeviceDto> getDevices() {
         return stateDeviceService.getDevices();
     }
 
-    @GetMapping("/all/free")
-    List<StateDeviceDto> getFreeDevices() {
+    @GetMapping("/free")
+    public List<StateDeviceDto> getFreeDevices() {
         return stateDeviceService.getFreeDevices();
     }
 }

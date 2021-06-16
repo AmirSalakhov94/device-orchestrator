@@ -19,9 +19,11 @@ public class SessionDto {
     private UUID id;
     private UUID profileId;
     private UUID deviceId;
-    private List<String> deviceImageUrls;
     private Instant start;
     private Instant end;
-    private Integer usageTimeInSeconds;
+    private long usageTimeInSeconds;
     private BigDecimal cost;
+    private boolean isActive;
+    private List<String> startDevicePictureUrls;
+    private List<String> endDevicePictureUrls;
 }

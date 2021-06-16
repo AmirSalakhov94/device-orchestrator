@@ -19,7 +19,6 @@ public class Session {
     private UUID id;
     private UUID profileId;
     private UUID deviceId;
-    private UUID routeId;
     private Instant start;
     private Instant end;
     private long usageTimeInSeconds;

@@ -4,23 +4,22 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import tech.itpark.deviceorchestrator.dto.enums.TypeDevice;
 
-import java.time.Instant;
 import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class StateDeviceDto {
+public class AnalyticDeviceDto {
 
     private UUID deviceId;
-    private String serialNumber;
+    private long totalMileage;
+    private float currentChargingPercentage;
+    private int numberOfUses;
+    private boolean isActive;
     private boolean isUsed;
+    private UUID lastRouteId;
     private double lat;
     private double lng;
-    private float chargingPercentage;
-    private TypeDevice type;
-    private Instant registrationDate;
 }

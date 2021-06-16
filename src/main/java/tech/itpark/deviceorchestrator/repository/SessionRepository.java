@@ -9,6 +9,8 @@ import java.util.UUID;
 
 public interface SessionRepository extends MongoRepository<Session, UUID> {
 
+    List<Session> findByActiveIsTrue();
+
     List<Session> findByDeviceId(UUID deviceId);
 
     Optional<Session> findByDeviceIdAndProfileIdAndActiveTrue(UUID deviceId, UUID profileId);
