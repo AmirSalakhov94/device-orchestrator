@@ -1,4 +1,4 @@
-package tech.itpark.deviceorchestrator.dto;
+package tech.itpark.deviceorchestrator.model;
 
 import lombok.*;
 import org.apache.commons.lang3.tuple.Pair;
@@ -11,7 +11,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AnalyticRouteDto {
+public class AnalyticRoute {
 
     private UUID deviceId;
     private UUID sessionId;

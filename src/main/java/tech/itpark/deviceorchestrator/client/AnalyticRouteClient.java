@@ -1,11 +1,10 @@
 package tech.itpark.deviceorchestrator.client;
 
-import tech.itpark.deviceorchestrator.dto.AnalyticDeviceDto;
+import tech.itpark.deviceorchestrator.dto.AnalyticRouteDto;
 
-import java.util.Map;
 import java.util.UUID;
 
-public interface AnalyticDeviceClient {
+public interface AnalyticRouteClient {
 
-    Map<UUID, AnalyticDeviceDto> getAnalyticDevices();
+    AnalyticRouteDto getAnalyticRouteByDeviceIdAndRouteId(UUID deviceId, UUID sessionId);
 }

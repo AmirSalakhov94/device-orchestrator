@@ -16,9 +16,14 @@ public class SessionController {
 
     private final SessionService sessionService;
 
-    @GetMapping("/{deviceId}")
-    public List<SessionDto> getSessions(@PathVariable("deviceId") UUID deviceId) {
+    @GetMapping("/all/{deviceId}")
+    public List<SessionDto> getSessionsByDeviceId(@PathVariable("deviceId") UUID deviceId) {
         return sessionService.getSessionsByDeviceId(deviceId);
+    }
+
+    @GetMapping("/all/{profileId}")
+    public List<SessionDto> getSessionsByProfileId(@PathVariable("profileId") UUID profileId) {
+        return sessionService.getSessionsByProfileId(profileId);
     }
 
     @GetMapping("/{sessionId}")

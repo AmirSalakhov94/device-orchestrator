@@ -1,6 +1,7 @@
 package tech.itpark.deviceorchestrator.dto;
 
 import lombok.*;
+import tech.itpark.deviceorchestrator.dto.enums.TypeDevice;
 
 import java.time.Instant;
 import java.util.List;
@@ -15,6 +16,7 @@ public class StateSessionDto {
 
     private UUID profileId;
     private UUID deviceId;
+    private TypeDevice typeDevice;
     private List<String> devicePictureUrls;
     private Instant time;
 }

@@ -1,13 +1,13 @@
 package tech.itpark.deviceorchestrator.mapper;
 
 import org.mapstruct.Mapper;
-import tech.itpark.deviceorchestrator.dto.SessionDto;
-import tech.itpark.deviceorchestrator.model.Session;
+import tech.itpark.deviceorchestrator.dto.AnalyticRouteDto;
+import tech.itpark.deviceorchestrator.model.AnalyticRoute;
 
 @Mapper
-public interface SessionMapper {
+public interface AnalyticRouteMapper {
 
-    Session fromDto(SessionDto session);
+    AnalyticRoute fromDto(AnalyticRouteDto analyticRoute);
 
-    SessionDto fromEntity(Session session);
+    AnalyticRouteDto fromEntity(AnalyticRoute analyticRoute);
 }

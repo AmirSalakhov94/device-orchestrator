@@ -12,6 +12,8 @@ public interface SessionService {
 
     List<SessionDto> getSessionsByDeviceId(UUID deviceId);
 
+    List<SessionDto> getSessionsByProfileId(UUID profileId);
+
     SessionDto getSessionById(UUID sessionId);
 
     void startSession(StateSessionDto startSession);

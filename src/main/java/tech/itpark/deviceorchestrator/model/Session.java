@@ -2,6 +2,7 @@ package tech.itpark.deviceorchestrator.model;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import tech.itpark.deviceorchestrator.dto.enums.TypeDevice;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -19,11 +20,12 @@ public class Session {
     private UUID id;
     private UUID profileId;
     private UUID deviceId;
+    private TypeDevice typeDevice;
     private Instant start;
     private Instant end;
-    private long usageTimeInSeconds;
     private BigDecimal cost;
     private Boolean isActive;
     private List<String> startDevicePictureUrls;
     private List<String> endDevicePictureUrls;
+    private AnalyticRoute analyticRoute;
 }
