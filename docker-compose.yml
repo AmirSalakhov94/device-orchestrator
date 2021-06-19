@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  device-orchestrator:
+    image: device-orchestrator
+    container_name: device-orchestrator
+    build: .
+    ports:
+      - 8083:8080
+    networks:
+      - device-backend
+    environment:
+      MONGODB_URI: mongodb://device-orchestrator-mongo:27017/db
+    depends_on:
+      - device-orchestrator-mongo
+  #      MONGO_DB_HOST: device-orchestrator-db
+  #      MONGO_DB_PORT: 27017
+  #      MONGO_DB_USERNAME: app
+  #      MONGO_DB_PASSWORD: pass
+
+  device-orchestrator-mongo:
+    image: mongo
+    container_name: device-orchestrator-mongo
+    restart: always
+    ports:
+      - 27017:27017
+    networks:
+      - device-backend
+    environment:
+      MONGO_INITDB_DATABASE: db
+      MONGO_INITDB_ROOT_USERNAME: app
+      MONGO_INITDB_ROOT_PASSWORD: pass
+
+networks:
+  device-backend:
+    external:
+      name: device-backend

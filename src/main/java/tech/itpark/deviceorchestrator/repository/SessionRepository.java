@@ -15,5 +15,5 @@ public interface SessionRepository extends MongoRepository<Session, UUID> {
 
     List<Session> findByProfileId(UUID profileId);
 
-    Optional<Session> findByDeviceIdAndProfileIdAndActiveTrue(UUID deviceId, UUID profileId);
+    Optional<Session> findByDeviceIdAndProfileIdAndIsActiveTrue(UUID deviceId, UUID profileId);
 }

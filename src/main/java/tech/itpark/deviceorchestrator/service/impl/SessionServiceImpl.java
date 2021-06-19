@@ -92,7 +92,7 @@ public class SessionServiceImpl implements SessionService {
         UUID deviceId = finishSession.getDeviceId();
         UUID profileId = finishSession.getProfileId();
 
-        Session session = sessionRepository.findByDeviceIdAndProfileIdAndActiveTrue(deviceId, profileId)
+        Session session = sessionRepository.findByDeviceIdAndProfileIdAndIsActiveTrue(deviceId, profileId)
                 .orElseThrow(() -> new NotFoundActiveSessionDeviceException(
                         String.format("Not found active session for profile %s and device %s", profileId, deviceId)));
 
