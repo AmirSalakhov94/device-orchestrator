@@ -11,7 +11,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/state/device")
+@RequestMapping("/orchestrator/state/device")
 public class StateDeviceController {
 
     private final StateDeviceService stateDeviceService;
