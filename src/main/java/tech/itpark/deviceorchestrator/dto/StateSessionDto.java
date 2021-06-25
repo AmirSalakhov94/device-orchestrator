@@ -14,7 +14,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class StateSessionDto {
 
-    private UUID profileId;
     private UUID deviceId;
     private TypeDevice typeDevice;
     private List<String> devicePictureUrls;

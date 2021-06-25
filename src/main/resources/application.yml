@@ -1,3 +1,4 @@
+
 spring:
   application:
     name: device-orchestrator
@@ -12,10 +13,9 @@ spring:
       port: 8500
   data:
     mongodb:
-      uri: ${MONGODB_URI:mongodb://localhost:27017/db}
+      host: ${MONGO_DB_HOST:localhost}
+      port: ${MONGO_DB_PORT:27017}
+      database: ${MONGO_DB:db}
       username: ${MONGO_DB_USERNAME:app}
       password: ${MONGO_DB_PASSWORD:pass}
-#      host: ${MONGO_DB_HOST:localhost}
-#      port: ${MONGO_DB_PORT:27017}
-#      database: ${MONGO_DB:db}
-
+#      uri: ${MONGODB_URI:mongodb://localhost:27017/db}

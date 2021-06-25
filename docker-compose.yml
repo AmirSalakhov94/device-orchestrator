@@ -5,8 +5,6 @@ services:
     image: device-orchestrator
     container_name: device-orchestrator
     build: .
-    ports:
-      - 8083:8080
     networks:
       - device-backend
     environment:
@@ -18,14 +16,14 @@ services:
       MONGO_DB_PASSWORD: pass
       MONGO_DB: db
     depends_on:
-      - consul
       - device-orchestrator-mongo
+#      - consul
 
   device-orchestrator-mongo:
     image: mongo:3
     container_name: device-orchestrator-mongo
-    ports:
-      - 27017:27017
+    expose:
+      - "27017"
     networks:
       - device-backend
     environment:
@@ -37,6 +35,7 @@ services:
 
   consul:
     image: consul:1.8.3
+    container_name: consul
     command: agent -dev -ui -node=server1 -bootstrap-expect=1 -client=0.0.0.0
     ports:
       - 8500:8500

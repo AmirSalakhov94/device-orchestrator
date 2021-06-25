@@ -16,7 +16,7 @@ public interface SessionService {
 
     SessionDto getSessionById(UUID sessionId);
 
-    void startSession(StateSessionDto startSession);
+    void startSession(UUID profileId, StateSessionDto startSession);
 
-    void finishSession(StateSessionDto finishSession);
+    void finishSession(UUID profileId, StateSessionDto finishSession);
 }

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import tech.itpark.deviceorchestrator.dto.RouteDto;
 
 @FeignClient(name = "device-analyzer", contextId = "routeClient")
-@RequestMapping("/route")
+@RequestMapping("/analytic/route")
 public interface RouteClient {
 
     @PostMapping("/start")

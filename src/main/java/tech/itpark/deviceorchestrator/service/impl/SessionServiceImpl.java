@@ -11,6 +11,7 @@ import tech.itpark.deviceorchestrator.dto.StateSessionDto;
 import tech.itpark.deviceorchestrator.dto.enums.TypeDevice;
 import tech.itpark.deviceorchestrator.exception.NotFoundActiveSessionDeviceException;
 import tech.itpark.deviceorchestrator.exception.NotFoundSessionDeviceException;
+import tech.itpark.deviceorchestrator.exception.SessionAlreadyExistsDeviceException;
 import tech.itpark.deviceorchestrator.mapper.AnalyticRouteMapper;
 import tech.itpark.deviceorchestrator.mapper.SessionMapper;
 import tech.itpark.deviceorchestrator.model.Session;
@@ -19,6 +20,7 @@ import tech.itpark.deviceorchestrator.service.CostCalculator;
 import tech.itpark.deviceorchestrator.service.SessionService;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -66,19 +68,26 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public void startSession(StateSessionDto startSession) {
+    public void startSession(UUID profileId, StateSessionDto startSession) {
         UUID deviceId = startSession.getDeviceId();
-        UUID sessionId = sessionRepository.save(sessionRepository.save(Session.builder()
-                .profileId(startSession.getProfileId())
+        sessionRepository.findByDeviceIdAndProfileIdAndIsActiveTrue(deviceId, profileId)
+                .ifPresent(session -> {
+                    throw new SessionAlreadyExistsDeviceException(
+                            String.format("Session for profile: %s and device: %s already exists",
+                                    profileId, startSession.getDeviceId()));
+                });
+
+        Session session = sessionRepository.save(sessionRepository.save(Session.builder()
+                .profileId(profileId)
                 .deviceId(startSession.getDeviceId())
                 .typeDevice(startSession.getTypeDevice())
-                .start(startSession.getTime())
+                .start(Instant.now())
                 .startDevicePictureUrls(startSession.getDevicePictureUrls())
                 .isActive(true)
-                .build())).getId();
+                .build()));
 
         RouteDto route = RouteDto.builder()
-                .sessionId(sessionId)
+                .sessionId(session.getId())
                 .isActive(true)
                 .deviceId(deviceId)
                 .start(startSession.getTime())
@@ -88,9 +97,8 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public void finishSession(StateSessionDto finishSession) {
+    public void finishSession(UUID profileId, StateSessionDto finishSession) {
         UUID deviceId = finishSession.getDeviceId();
-        UUID profileId = finishSession.getProfileId();
 
         Session session = sessionRepository.findByDeviceIdAndProfileIdAndIsActiveTrue(deviceId, profileId)
                 .orElseThrow(() -> new NotFoundActiveSessionDeviceException(
@@ -99,12 +107,12 @@ public class SessionServiceImpl implements SessionService {
         routeClient.finishRoute(RouteDto.builder()
                 .sessionId(session.getId())
                 .start(session.getStart())
-                .end(finishSession.getTime())
+                .end(Instant.now())
                 .isActive(false)
                 .deviceId(deviceId)
                 .build());
 
-        AnalyticRouteDto analyticRoute = analyticRouteClient.getAnalyticRouteByDeviceIdAndRouteId(deviceId, profileId);
+        AnalyticRouteDto analyticRoute = analyticRouteClient.getAnalyticRouteByDeviceIdAndSessionId(deviceId, session.getId());
         session.setAnalyticRoute(analyticRouteMapper.fromDto(analyticRoute));
 
         TypeDevice typeDevice = session.getTypeDevice();
@@ -112,7 +120,7 @@ public class SessionServiceImpl implements SessionService {
         session.setCost(cost);
 
         session.setEndDevicePictureUrls(finishSession.getDevicePictureUrls());
-        session.setEnd(finishSession.getTime());
+        session.setEnd(Instant.now());
         session.setIsActive(false);
         sessionRepository.save(session);
     }

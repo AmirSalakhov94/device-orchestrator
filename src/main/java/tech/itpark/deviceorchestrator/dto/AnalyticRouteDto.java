@@ -1,7 +1,6 @@
 package tech.itpark.deviceorchestrator.dto;
 
 import lombok.*;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,11 +13,11 @@ import java.util.UUID;
 public class AnalyticRouteDto {
 
     private UUID deviceId;
-    private UUID sessionId;
+    private String sessionId;
     private UUID routeId;
-    private double distance;
-    private List<Pair<Double, Double>> routes;
-    private float maxSpeedInMeters;
-    private float avgSpeedInMeters;
-    private int usagePeriodInSeconds;
+    private Double distance;
+    private List<CoordinateDto> routes;
+    private Float maxSpeedInMeters;
+    private Float avgSpeedInMeters;
+    private Integer usagePeriodInSeconds;
 }

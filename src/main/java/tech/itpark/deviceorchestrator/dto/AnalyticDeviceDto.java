@@ -12,12 +12,12 @@ import java.util.UUID;
 public class AnalyticDeviceDto {
 
     private UUID deviceId;
-    private long totalMileage;
-    private float currentChargingPercentage;
-    private int numberOfUses;
-    private boolean isActive;
-    private boolean isUsed;
+    private Long totalMileage;
+    private Float currentChargingPercentage;
+    private Integer numberOfUses;
+    private Boolean isActive;
+    private Boolean isUsed;
     private UUID lastRouteId;
-    private double lat;
-    private double lng;
+    private Double lat;
+    private Double lng;
 }

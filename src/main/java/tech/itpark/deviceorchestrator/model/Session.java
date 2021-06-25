@@ -2,6 +2,7 @@ package tech.itpark.deviceorchestrator.model;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import tech.itpark.deviceorchestrator.dto.enums.TypeDevice;
 
 import java.math.BigDecimal;
@@ -14,10 +15,11 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Document(collection = "session")
 public class Session {
 
     @Id
-    private UUID id;
+    private String id;
     private UUID profileId;
     private UUID deviceId;
     private TypeDevice typeDevice;

@@ -14,10 +14,11 @@ import java.util.UUID;
 public class StateDeviceDto {
 
     private UUID deviceId;
-    private boolean isUsed;
-    private double lat;
-    private double lng;
-    private float chargingPercentage;
-    private TypeDevice type;
-    private Instant registrationDate;
+    private Double lat;
+    private Double lng;
+    private Float chargingPercentage;
+
+    @Builder.Default
+    private TypeDevice type = TypeDevice.SCOOTER;
+    private Instant recordTime;
 }

@@ -15,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class SessionDto {
 
-    private UUID id;
+    private String id;
     private UUID profileId;
     private UUID deviceId;
     private TypeDevice typeDevice;

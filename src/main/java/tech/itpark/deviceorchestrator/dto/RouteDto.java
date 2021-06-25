@@ -12,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RouteDto {
 
-    private UUID sessionId;
+    private String sessionId;
     private UUID deviceId;
     private Boolean isActive;
     private Instant start;

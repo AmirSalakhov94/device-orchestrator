@@ -1,7 +1,8 @@
 package tech.itpark.deviceorchestrator.model;
 
 import lombok.*;
-import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.data.mongodb.core.mapping.Document;
+import tech.itpark.deviceorchestrator.dto.CoordinateDto;
 
 import java.util.List;
 import java.util.UUID;
@@ -11,13 +12,14 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Document(collection = "analyticRoute")
 public class AnalyticRoute {
 
     private UUID deviceId;
-    private UUID sessionId;
+    private String sessionId;
     private UUID routeId;
     private double distance;
-    private List<Pair<Double, Double>> routes;
+    private List<CoordinateDto> routes;
     private float maxSpeedInMeters;
     private float avgSpeedInMeters;
     private int usagePeriodInSeconds;

@@ -13,6 +13,6 @@ import java.util.UUID;
 public interface AnalyticRouteClient {
 
     @GetMapping("/{deviceId}/{sessionId}")
-    AnalyticRouteDto getAnalyticRouteByDeviceIdAndRouteId(@PathVariable("deviceId") UUID deviceId,
-                                                          @PathVariable("sessionId") UUID sessionId);
+    AnalyticRouteDto getAnalyticRouteByDeviceIdAndSessionId(@PathVariable("deviceId") UUID deviceId,
+                                                            @PathVariable("sessionId") String sessionId);
 }
