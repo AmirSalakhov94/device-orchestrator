@@ -1,6 +1,7 @@
 package tech.itpark.deviceorchestrator.dto;
 
 import lombok.*;
+import tech.itpark.deviceorchestrator.dto.enums.Role;
 import tech.itpark.deviceorchestrator.dto.enums.TypeDevice;
 
 import java.time.Instant;
@@ -14,8 +15,10 @@ import java.util.UUID;
 public class DeviceDto {
 
     private UUID id;
-    private String serialNumber;
+    private String name;
     private String password;
+    private String serialNumber;
     private TypeDevice type;
-    private Instant registrationDate;
+    private Role role;
+    private Instant createDate;
 }

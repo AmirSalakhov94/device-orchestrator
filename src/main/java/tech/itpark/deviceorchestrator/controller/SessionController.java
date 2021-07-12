@@ -2,11 +2,9 @@ package tech.itpark.deviceorchestrator.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import tech.itpark.deviceorchestrator.dto.ProfileDto;
 import tech.itpark.deviceorchestrator.dto.SessionDto;
 import tech.itpark.deviceorchestrator.dto.StateSessionDto;
 import tech.itpark.deviceorchestrator.service.SessionService;
-import tech.itpark.deviceorchestrator.utils.ProfileUtil;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,16 +32,12 @@ public class SessionController {
     }
 
     @PostMapping("/start")
-    public void startSession(@RequestHeader("X-Profile") String xProfile,
-                             @RequestBody StateSessionDto sessionStart) {
-        ProfileDto profile = ProfileUtil.getProfileWithHeader(xProfile);
-        sessionService.startSession(profile.getId(), sessionStart);
+    public void startSession(@RequestBody StateSessionDto sessionStart) {
+        sessionService.startSession(sessionStart);
     }
 
     @PutMapping("/finish")
-    public void finishSession(@RequestHeader("X-Profile") String xProfile,
-                              @RequestBody StateSessionDto sessionEnd) {
-        ProfileDto profile = ProfileUtil.getProfileWithHeader(xProfile);
-        sessionService.finishSession(profile.getId(), sessionEnd);
+    public void finishSession(@RequestBody StateSessionDto sessionEnd) {
+        sessionService.finishSession(sessionEnd);
     }
 }

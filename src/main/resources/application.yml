@@ -19,3 +19,12 @@ spring:
       username: ${MONGO_DB_USERNAME:app}
       password: ${MONGO_DB_PASSWORD:pass}
 #      uri: ${MONGODB_URI:mongodb://localhost:27017/db}
+
+security:
+  oauth2:
+    client:
+      client-id: devicerenter
+      client-secret: devicerentersecret
+    resource:
+      jwt:
+        key-uri: http://localhost:7777/oauth/token_key

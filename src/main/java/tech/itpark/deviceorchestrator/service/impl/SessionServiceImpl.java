@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tech.itpark.deviceorchestrator.client.AnalyticRouteClient;
 import tech.itpark.deviceorchestrator.client.RouteClient;
-import tech.itpark.deviceorchestrator.dto.AnalyticRouteDto;
-import tech.itpark.deviceorchestrator.dto.RouteDto;
-import tech.itpark.deviceorchestrator.dto.SessionDto;
-import tech.itpark.deviceorchestrator.dto.StateSessionDto;
+import tech.itpark.deviceorchestrator.dto.*;
 import tech.itpark.deviceorchestrator.dto.enums.TypeDevice;
 import tech.itpark.deviceorchestrator.exception.NotFoundActiveSessionDeviceException;
 import tech.itpark.deviceorchestrator.exception.NotFoundSessionDeviceException;
@@ -16,6 +13,7 @@ import tech.itpark.deviceorchestrator.mapper.AnalyticRouteMapper;
 import tech.itpark.deviceorchestrator.mapper.SessionMapper;
 import tech.itpark.deviceorchestrator.model.Session;
 import tech.itpark.deviceorchestrator.repository.SessionRepository;
+import tech.itpark.deviceorchestrator.security.principal.PrincipalExtractor;
 import tech.itpark.deviceorchestrator.service.CostCalculator;
 import tech.itpark.deviceorchestrator.service.SessionService;
 
@@ -35,6 +33,7 @@ public class SessionServiceImpl implements SessionService {
     private final AnalyticRouteClient analyticRouteClient;
     private final AnalyticRouteMapper analyticRouteMapper;
     private final CostCalculator costCalculator;
+    private final PrincipalExtractor<ProfileDto> principalExtractor;
 
     @Override
     public List<SessionDto> getActiveSession() {
@@ -68,17 +67,18 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public void startSession(UUID profileId, StateSessionDto startSession) {
+    public void startSession(StateSessionDto startSession) {
+        ProfileDto profile = principalExtractor.getPrincipal();
         UUID deviceId = startSession.getDeviceId();
-        sessionRepository.findByDeviceIdAndProfileIdAndIsActiveTrue(deviceId, profileId)
+        sessionRepository.findByDeviceIdAndProfileIdAndIsActiveTrue(deviceId, profile.getId())
                 .ifPresent(session -> {
                     throw new SessionAlreadyExistsDeviceException(
                             String.format("Session for profile: %s and device: %s already exists",
-                                    profileId, startSession.getDeviceId()));
+                                    profile.getId(), startSession.getDeviceId()));
                 });
 
         Session session = sessionRepository.save(sessionRepository.save(Session.builder()
-                .profileId(profileId)
+                .profileId(profile.getId())
                 .deviceId(startSession.getDeviceId())
                 .typeDevice(startSession.getTypeDevice())
                 .start(Instant.now())
@@ -97,12 +97,13 @@ public class SessionServiceImpl implements SessionService {
     }
 
     @Override
-    public void finishSession(UUID profileId, StateSessionDto finishSession) {
+    public void finishSession(StateSessionDto finishSession) {
+        ProfileDto profile = principalExtractor.getPrincipal();
         UUID deviceId = finishSession.getDeviceId();
 
-        Session session = sessionRepository.findByDeviceIdAndProfileIdAndIsActiveTrue(deviceId, profileId)
+        Session session = sessionRepository.findByDeviceIdAndProfileIdAndIsActiveTrue(deviceId, profile.getId())
                 .orElseThrow(() -> new NotFoundActiveSessionDeviceException(
-                        String.format("Not found active session for profile %s and device %s", profileId, deviceId)));
+                        String.format("Not found active session for profile %s and device %s", profile.getId(), deviceId)));
 
         routeClient.finishRoute(RouteDto.builder()
                 .sessionId(session.getId())

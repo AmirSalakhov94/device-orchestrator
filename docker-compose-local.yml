@@ -7,6 +7,8 @@ services:
     build: .
     networks:
       - device-backend
+    depends_on:
+      - device-orchestrator-mongo
     environment:
       CONSUL_HOST: consul
       MONGODB_URI: mongodb://device-orchestrator-mongo:27017/db
@@ -15,15 +17,13 @@ services:
       MONGO_DB_USERNAME: app
       MONGO_DB_PASSWORD: pass
       MONGO_DB: db
-    depends_on:
-      - device-orchestrator-mongo
-#      - consul
+      SPRING_PROFILES_ACTIVE: local
 
   device-orchestrator-mongo:
     image: mongo:3
     container_name: device-orchestrator-mongo
-    expose:
-      - "27017"
+    ports:
+      - 27017:27017
     networks:
       - device-backend
     environment:
@@ -32,6 +32,15 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: pass
     volumes:
       - ./docker-entrypoint-initdb:/docker-entrypoint-initdb.d:ro
+
+  consul:
+    image: consul:1.8.3
+    container_name: consul
+    command: agent -dev -ui -node=server1 -bootstrap-expect=1 -client=0.0.0.0
+    ports:
+      - 8500:8500
+    networks:
+      - device-backend
 
 networks:
   device-backend:
