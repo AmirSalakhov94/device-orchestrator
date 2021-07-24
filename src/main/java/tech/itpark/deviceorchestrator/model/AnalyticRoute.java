@@ -19,7 +19,7 @@ public class AnalyticRoute {
     private String sessionId;
     private UUID routeId;
     private double distance;
-    private List<CoordinateDto> routes;
+    private List<CoordinateDto> route;
     private float maxSpeedInMeters;
     private float avgSpeedInMeters;
     private int usagePeriodInSeconds;

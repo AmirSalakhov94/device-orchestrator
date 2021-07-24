@@ -8,6 +8,8 @@ import java.util.UUID;
 
 public interface SessionService {
 
+    List<SessionDto> getInactiveSession();
+
     List<SessionDto> getActiveSession();
 
     List<SessionDto> getSessionsByDeviceId(UUID deviceId);
