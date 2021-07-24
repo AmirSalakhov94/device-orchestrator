@@ -1,0 +1,64 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package tech.itpark.deviceanalyzer.grpc;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+message AnalyticRouteRequest {
+  string deviceId = 1;
+  string sessionId = 2;
+}
+
+message AnalyticRouteResponse {
+  string deviceId = 1;
+  string sessionId = 2;
+  string routeId = 3;
+  double distance = 4;
+  repeated Coordinate route = 5;
+  float maxSpeedInMeters = 6;
+  float avgSpeedInMeters = 7;
+  int32 usagePeriodInSeconds = 8;
+}
+
+message Coordinate{
+  double lat = 1;
+  double lng = 2;
+}
+
+message RouteRequest {
+  string sessionId = 1;
+  string deviceId = 2;
+  bool isActive = 3;
+  google.protobuf.Timestamp start = 4;
+  google.protobuf.Timestamp end = 5;
+}
+
+message StateDevice {
+  string deviceId = 1;
+  double lat = 2;
+  double lng = 3;
+  float chargingPercentage = 4;
+  string type = 5;
+  google.protobuf.Timestamp recordTime = 6;
+}
+
+message StateDeviceResponse {
+  repeated StateDevice stateDevices = 1;
+}
+
+message DeviceId {
+  string deviceId = 1;
+}
+
+message DeviceIdsRequest {
+  repeated DeviceId deviceIds = 1;
+}
+
+service AnalyticRouteService {
+  rpc getAnalyticByDeviceAndSession(AnalyticRouteRequest) returns (AnalyticRouteResponse);
+  rpc startRoute(RouteRequest) returns (google.protobuf.Empty);
+  rpc finishRoute(RouteRequest) returns (google.protobuf.Empty);
+  rpc getStateDevices(google.protobuf.Empty) returns (StateDeviceResponse);
+  rpc getStateDevicesForIds(DeviceIdsRequest) returns (StateDeviceResponse);
+}

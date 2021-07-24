@@ -2,8 +2,7 @@ package tech.itpark.deviceorchestrator.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import tech.itpark.deviceorchestrator.client.AnalyticRouteClient;
-import tech.itpark.deviceorchestrator.client.RouteClient;
+import tech.itpark.deviceorchestrator.client.grpc.GrpcAnalyticRouteClient;
 import tech.itpark.deviceorchestrator.dto.*;
 import tech.itpark.deviceorchestrator.dto.enums.TypeDevice;
 import tech.itpark.deviceorchestrator.exception.NotFoundActiveSessionDeviceException;
@@ -29,11 +28,18 @@ public class SessionServiceImpl implements SessionService {
 
     private final SessionMapper sessionMapper;
     private final SessionRepository sessionRepository;
-    private final RouteClient routeClient;
-    private final AnalyticRouteClient analyticRouteClient;
     private final AnalyticRouteMapper analyticRouteMapper;
     private final CostCalculator costCalculator;
     private final PrincipalExtractor<ProfileDto> principalExtractor;
+    private final GrpcAnalyticRouteClient grpcAnalyticRouteClient;
+
+    @Override
+    public List<SessionDto> getInactiveSession() {
+        return sessionRepository.findByIsActiveIsFalse()
+                .stream()
+                .map(sessionMapper::fromEntity)
+                .collect(Collectors.toList());
+    }
 
     @Override
     public List<SessionDto> getActiveSession() {
@@ -93,7 +99,7 @@ public class SessionServiceImpl implements SessionService {
                 .start(startSession.getTime())
                 .build();
 
-        routeClient.startRoute(route);
+        grpcAnalyticRouteClient.startRoute(route);
     }
 
     @Override
@@ -105,7 +111,7 @@ public class SessionServiceImpl implements SessionService {
                 .orElseThrow(() -> new NotFoundActiveSessionDeviceException(
                         String.format("Not found active session for profile %s and device %s", profile.getId(), deviceId)));
 
-        routeClient.finishRoute(RouteDto.builder()
+        grpcAnalyticRouteClient.finishRoute(RouteDto.builder()
                 .sessionId(session.getId())
                 .start(session.getStart())
                 .end(Instant.now())
@@ -113,7 +119,8 @@ public class SessionServiceImpl implements SessionService {
                 .deviceId(deviceId)
                 .build());
 
-        AnalyticRouteDto analyticRoute = analyticRouteClient.getAnalyticRouteByDeviceIdAndSessionId(deviceId, session.getId());
+
+        AnalyticRouteDto analyticRoute = grpcAnalyticRouteClient.getAnalyticByDeviceAndSession(deviceId, session.getId());
         session.setAnalyticRoute(analyticRouteMapper.fromDto(analyticRoute));
 
         TypeDevice typeDevice = session.getTypeDevice();
