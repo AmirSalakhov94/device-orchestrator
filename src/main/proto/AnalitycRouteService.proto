@@ -60,5 +60,6 @@ service AnalyticRouteService {
   rpc startRoute(RouteRequest) returns (google.protobuf.Empty);
   rpc finishRoute(RouteRequest) returns (google.protobuf.Empty);
   rpc getStateDevices(google.protobuf.Empty) returns (StateDeviceResponse);
+  rpc getStateFreeDevices(google.protobuf.Empty) returns (StateDeviceResponse);
   rpc getStateDevicesForIds(DeviceIdsRequest) returns (StateDeviceResponse);
 }

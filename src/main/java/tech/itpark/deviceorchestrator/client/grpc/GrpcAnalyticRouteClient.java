@@ -110,6 +110,23 @@ public class GrpcAnalyticRouteClient {
         managedChannel.shutdown();
     }
 
+    public List<StateDeviceDto> getStateFreeDevices() {
+        ServiceInstance choose = serviceInstanceChooser.choose(SERVICE_ID);
+        ManagedChannel managedChannel = ManagedChannelBuilder.forAddress(choose.getHost(), choose.getPort())
+                .usePlaintext()
+                .build();
+
+        AnalyticRouteServiceGrpc.AnalyticRouteServiceBlockingStub analyticRouteService
+                = AnalyticRouteServiceGrpc.newBlockingStub(managedChannel);
+
+        StateDeviceResponse stateDeviceResponse = analyticRouteService.getStateFreeDevices(Empty.getDefaultInstance());
+        List<StateDevice> stateDevicesList = stateDeviceResponse.getStateDevicesList();
+
+        managedChannel.shutdown();
+
+        return stateDeviceMapper.fromGrpcResponse(stateDevicesList);
+    }
+
     public List<StateDeviceDto> getStateDevices() {
         ServiceInstance choose = serviceInstanceChooser.choose(SERVICE_ID);
         ManagedChannel managedChannel = ManagedChannelBuilder.forAddress(choose.getHost(), choose.getPort())

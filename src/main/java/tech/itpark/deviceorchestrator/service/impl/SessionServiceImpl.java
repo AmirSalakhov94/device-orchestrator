@@ -96,7 +96,7 @@ public class SessionServiceImpl implements SessionService {
                 .sessionId(session.getId())
                 .isActive(true)
                 .deviceId(deviceId)
-                .start(startSession.getTime())
+                .start(session.getStart())
                 .build();
 
         grpcAnalyticRouteClient.startRoute(route);
